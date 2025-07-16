@@ -7,3 +7,4 @@ transformers
 Pillow
 av
 numpy
+opencv-python-headless
