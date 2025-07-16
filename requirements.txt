@@ -1,0 +1,9 @@
+streamlit
+streamlit-webrtc
+fer
+whisper
+torch
+transformers
+Pillow
+av
+numpy
