@@ -1,6 +1,8 @@
 streamlit
 streamlit-webrtc
 fer
+moviepy
+imageio[ffmpeg]
 whisper
 torch
 transformers
