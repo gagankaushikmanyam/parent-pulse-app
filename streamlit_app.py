@@ -1,6 +1,5 @@
 import streamlit as st
-from PIL import Image
-from fer import FER
+from deepface import DeepFace
 from streamlit_webrtc import webrtc_streamer, VideoTransformerBase
 import whisper
 from transformers import pipeline
@@ -8,19 +7,17 @@ import json
 import datetime
 import os
 import numpy as np
-import av
 
 st.set_page_config(page_title="ParentPulse Remote Check-in", layout="centered")
 
 # Load models once
 @st.cache_resource
 def load_models():
-    face_detector = FER(mtcnn=True)
     whisper_model = whisper.load_model("base")
     sentiment_model = pipeline("sentiment-analysis")
-    return face_detector, whisper_model, sentiment_model
+    return whisper_model, sentiment_model
 
-face_detector, whisper_model, sentiment_model = load_models()
+whisper_model, sentiment_model = load_models()
 
 LOG_FILE = "checkin_logs.json"
 
@@ -38,17 +35,17 @@ def save_log(entry):
 
 st.title("👨‍👩‍👧 ParentPulse - Daily Emotion Check-in")
 
-# Webcam capture class
 class VideoEmotionTransformer(VideoTransformerBase):
     def __init__(self):
         self.face_emotion = None
 
     def transform(self, frame):
         img = frame.to_ndarray(format="bgr24")
-        result = face_detector.top_emotion(img)
-        if result:
-            emotion, score = result
-            self.face_emotion = emotion
+        try:
+            result = DeepFace.analyze(img, actions=['emotion'], enforce_detection=False)
+            self.face_emotion = result['dominant_emotion']
+        except Exception:
+            self.face_emotion = None
         return img
 
 webrtc_ctx = webrtc_streamer(
