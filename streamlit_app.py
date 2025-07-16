@@ -1,5 +1,5 @@
 import streamlit as st
-from deepface import DeepFace
+from deepface.DeepFace import DeepFace
 from streamlit_webrtc import webrtc_streamer, VideoTransformerBase
 import whisper
 from transformers import pipeline
