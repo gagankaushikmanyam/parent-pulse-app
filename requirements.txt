@@ -1,8 +1,6 @@
 streamlit
 streamlit-webrtc
-fer
-moviepy
-imageio[ffmpeg]
+deepface
 whisper
 torch
 transformers
